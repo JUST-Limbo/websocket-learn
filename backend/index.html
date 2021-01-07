@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<input type="text">
+<button onclick="ksend()">发送请求</button>
+  
+<div></div>
+</body>
+<script>
+var input = document.querySelector('input')
+var button = document.querySelector('button')
+var div = document.querySelector('div')
+
+var socket = new WebSocket('ws://localhost:4000')
+const TYPE_ENTER = 0
+const TYPE_LEAVE = 1
+const TYPE_MSG = 2
+
+
+socket.addEventListener('open',function(){
+  div.innerHTML = "连接成功了<br>"
+})
+
+function ksend(){
+  var value = input.value
+  socket.send(value)
+  input.value = ""
+}
+
+
+socket.addEventListener('message',function(e){
+  var data = JSON.parse(e.data)
+
+  console.log(data.type);
+  
+  var dv = document.createElement('div')
+  dv.innerHTML += data.msg +  '-----' + data.time
+  if(data.type===TYPE_ENTER){
+        dv.style.color = 'green'
+  }else if(data.type===TYPE_LEAVE){
+        dv.style.color = 'red'
+  }
+  div.appendChild(dv)
+  
+})
+
+
+
+
+
+</script>
+
+
+</html>

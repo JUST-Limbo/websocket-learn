@@ -1,0 +1,1 @@
+先用node启动app.js，再用打开index.html
